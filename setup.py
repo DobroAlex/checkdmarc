@@ -11,19 +11,14 @@ from __future__ import absolute_import
 
 # Always prefer setuptools over distutils
 from setuptools import setup
-# To use a consistent encoding
-from codecs import open
-from os import path
 
 from checkdmarc_signalless import __version__
 
+# To use a consistent encoding
+
 desc = "A Python module and command line parser for SPF and DMARC records"
 
-here = path.abspath(path.dirname(__file__))
-
-# Get the long description from the README file
-with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
-    long_description = f.read()
+long_description = "See https://github.com/DobroAlex/checkdmarc"
 
 setup(
     name='checkdmarc_signalless',
