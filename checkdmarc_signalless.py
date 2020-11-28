@@ -682,7 +682,7 @@ def _get_nameservers(domain, nameservers=None, timeout=2.0):
                         integer and a ``hostname``
 
     Raises:
-        :exc:`checkdmarc.DNSException`
+        :exc:`checkdmarc_signalless.DNSException`
 
     """
     answers = []
@@ -713,7 +713,7 @@ def _get_mx_hosts(domain, nameservers=None, timeout=2.0):
                         integer and a ``hostname``
 
     Raises:
-        :exc:`checkdmarc.DNSException`
+        :exc:`checkdmarc_signalless.DNSException`
 
     """
     hosts = []
@@ -751,7 +751,7 @@ def _get_a_records(domain, nameservers=None, timeout=2.0):
         list: A sorted list of IPv4 and IPv6 addresses
 
     Raises:
-        :exc:`checkdmarc.DNSException`
+        :exc:`checkdmarc_signalless.DNSException`
 
     """
     qtypes = ["A", "AAAA"]
@@ -783,7 +783,7 @@ def _get_reverse_dns(ip_address):
         list: A list of reverse DNS hostnames
 
     Raises:
-        :exc:`checkdmarc.DNSException`
+        :exc:`checkdmarc_signalless.DNSException`
 
     """
     try:
@@ -811,7 +811,7 @@ def _get_txt_records(domain, nameservers=None, timeout=2.0):
         list: A list of TXT records
 
      Raises:
-        :exc:`checkdmarc.DNSException`
+        :exc:`checkdmarc_signalless.DNSException`
 
     """
     try:
@@ -976,10 +976,10 @@ def query_dmarc_record(domain, nameservers=None, timeout=2.0):
                      - ``warnings`` - warning conditions found
 
      Raises:
-        :exc:`checkdmarc.DMARCRecordNotFound`
-        :exc:`checkdmarc.DMARCRecordInWrongLocation`
-        :exc:`checkdmarc.MultipleDMARCRecords`
-        :exc:`checkdmarc.SPFRecordFoundWhereDMARCRecordShouldBe`
+        :exc:`checkdmarc_signalless.DMARCRecordNotFound`
+        :exc:`checkdmarc_signalless.DMARCRecordInWrongLocation`
+        :exc:`checkdmarc_signalless.MultipleDMARCRecords`
+        :exc:`checkdmarc_signalless.SPFRecordFoundWhereDMARCRecordShouldBe`
 
     """
     logging.debug("Checking for a DMARC record on {0}".format(domain))
@@ -1030,9 +1030,9 @@ def query_bimi_record(domain, selector="default", nameservers=None,
                      - ``warnings`` - warning conditions found
 
      Raises:
-        :exc:`checkdmarc.BIMIRecordNotFound`
-        :exc:`checkdmarc.BIMIRecordInWrongLocation`
-        :exc:`checkdmarc.MultipleBIMIRecords`
+        :exc:`checkdmarc_signalless.BIMIRecordNotFound`
+        :exc:`checkdmarc_signalless.BIMIRecordInWrongLocation`
+        :exc:`checkdmarc_signalless.MultipleBIMIRecords`
 
     """
     logging.debug("Checking for a BIMI record on {0}".format(domain))
@@ -1120,7 +1120,7 @@ def parse_dmarc_report_uri(uri):
                     - ``address``
                     - ``size_limit``
     Raises:
-        :exc:`checkdmarc.InvalidDMARCReportURI`
+        :exc:`checkdmarc_signalless.InvalidDMARCReportURI`
 
     """
     uri = uri.strip()
@@ -1207,8 +1207,8 @@ def verify_dmarc_report_destination(source_domain, destination_domain,
           domain
 
       Raises:
-          :exc:`checkdmarc.UnverifiedDMARCURIDestination`
-          :exc:`checkdmarc.UnrelatedTXTRecordFound`
+          :exc:`checkdmarc_signalless.UnverifiedDMARCURIDestination`
+          :exc:`checkdmarc_signalless.UnrelatedTXTRecordFound`
       """
 
     source_domain = source_domain.lower()
@@ -1286,13 +1286,13 @@ def parse_dmarc_record(record, domain, parked=False,
             ``include_tag_descriptions`` is set to ``True``
 
     Raises:
-        :exc:`checkdmarc.DMARCSyntaxError`
-        :exc:`checkdmarc.InvalidDMARCTag`
-        :exc:`checkdmarc.InvaliddDMARCTagValue`
-        :exc:`checkdmarc.InvalidDMARCReportURI`
-        :exc:`checkdmarc.UnverifiedDMARCURIDestination`
-        :exc:`checkdmarc.UnrelatedTXTRecordFound`
-        :exc:`checkdmarc.DMARCReportEmailAddressMissingMXRecords`
+        :exc:`checkdmarc_signalless.DMARCSyntaxError`
+        :exc:`checkdmarc_signalless.InvalidDMARCTag`
+        :exc:`checkdmarc_signalless.InvaliddDMARCTagValue`
+        :exc:`checkdmarc_signalless.InvalidDMARCReportURI`
+        :exc:`checkdmarc_signalless.UnverifiedDMARCURIDestination`
+        :exc:`checkdmarc_signalless.UnrelatedTXTRecordFound`
+        :exc:`checkdmarc_signalless.DMARCReportEmailAddressMissingMXRecords`
 
     """
     logging.debug("Parsing the DMARC record for {0}".format(domain))
@@ -1497,21 +1497,21 @@ def get_dmarc_record(domain, include_tag_descriptions=False, nameservers=None,
         OrderedDict: An ``OrderedDict`` with the following keys:
          - ``record`` - The DMARC record string
          - ``location`` -  Where the DMARC was found
-         - ``parsed`` - See :meth:`checkdmarc.parse_dmarc_record`
+         - ``parsed`` - See :meth:`checkdmarc_signalless.parse_dmarc_record`
 
      Raises:
-        :exc:`checkdmarc.DMARCRecordNotFound`
-        :exc:`checkdmarc.DMARCRecordInWrongLocation`
-        :exc:`checkdmarc.MultipleDMARCRecords`
-        :exc:`checkdmarc.SPFRecordFoundWhereDMARCRecordShouldBe`
-        :exc:`checkdmarc.UnverifiedDMARCURIDestination`
-        :exc:`checkdmarc.DMARCSyntaxError`
-        :exc:`checkdmarc.InvalidDMARCTag`
-        :exc:`checkdmarc.InvalidDMARCTagValue`
-        :exc:`checkdmarc.InvalidDMARCReportURI`
-        :exc:`checkdmarc.UnverifiedDMARCURIDestination`
-        :exc:`checkdmarc.UnrelatedTXTRecordFound`
-        :exc:`checkdmarc.DMARCReportEmailAddressMissingMXRecords`
+        :exc:`checkdmarc_signalless.DMARCRecordNotFound`
+        :exc:`checkdmarc_signalless.DMARCRecordInWrongLocation`
+        :exc:`checkdmarc_signalless.MultipleDMARCRecords`
+        :exc:`checkdmarc_signalless.SPFRecordFoundWhereDMARCRecordShouldBe`
+        :exc:`checkdmarc_signalless.UnverifiedDMARCURIDestination`
+        :exc:`checkdmarc_signalless.DMARCSyntaxError`
+        :exc:`checkdmarc_signalless.InvalidDMARCTag`
+        :exc:`checkdmarc_signalless.InvalidDMARCTagValue`
+        :exc:`checkdmarc_signalless.InvalidDMARCReportURI`
+        :exc:`checkdmarc_signalless.UnverifiedDMARCURIDestination`
+        :exc:`checkdmarc_signalless.UnrelatedTXTRecordFound`
+        :exc:`checkdmarc_signalless.DMARCReportEmailAddressMissingMXRecords`
     """
     query = query_dmarc_record(domain, nameservers=nameservers,
                                timeout=timeout)
@@ -1544,7 +1544,7 @@ def query_spf_record(domain, nameservers=None, timeout=2.0):
          - ``warnings`` - A ``list`` of warnings
 
     Raises:
-        :exc:`checkdmarc.SPFRecordNotFound`
+        :exc:`checkdmarc_signalless.SPFRecordNotFound`
     """
     logging.debug("Checking for a SPF record on {0}".format(domain))
     warnings = []
@@ -1617,10 +1617,10 @@ def parse_spf_record(record, domain, parked=False, seen=None, nameservers=None,
          - ``warnings`` - A ``list`` of warnings
 
     Raises:
-        :exc:`checkdmarc.SPFIncludeLoop`
-        :exc:`checkdmarc.SPFRedirectLoop`
-        :exc:`checkdmarc.SPFSyntaxError`
-        :exc:`checkdmarc.SPFTooManyDNSLookups`
+        :exc:`checkdmarc_signalless.SPFIncludeLoop`
+        :exc:`checkdmarc_signalless.SPFRedirectLoop`
+        :exc:`checkdmarc_signalless.SPFSyntaxError`
+        :exc:`checkdmarc_signalless.SPFTooManyDNSLookups`
     """
     logging.debug("Parsing the SPF record on {0}".format(domain))
     lookup_mechanisms = ["a", "mx", "include", "exists", "redirect"]
@@ -1814,11 +1814,11 @@ def get_spf_record(domain, nameservers=None, timeout=2.0):
         OrderedDict: An SPF record parsed by result
 
     Raises:
-        :exc:`checkdmarc.SPFRecordNotFound`
-        :exc:`checkdmarc.SPFIncludeLoop`
-        :exc:`checkdmarc.SPFRedirectLoop`
-        :exc:`checkdmarc.SPFSyntaxError`
-        :exc:`checkdmarc.SPFTooManyDNSLookups`
+        :exc:`checkdmarc_signalless.SPFRecordNotFound`
+        :exc:`checkdmarc_signalless.SPFIncludeLoop`
+        :exc:`checkdmarc_signalless.SPFRedirectLoop`
+        :exc:`checkdmarc_signalless.SPFSyntaxError`
+        :exc:`checkdmarc_signalless.SPFTooManyDNSLookups`
 
     """
     record = query_spf_record(domain, nameservers=nameservers, timeout=timeout)
@@ -2303,11 +2303,11 @@ def check_domains(domains, parked=False,
 
        - ``domain`` - The domain name
        - ``base_domain`` The base domain
-       - ``mx`` - See :func:`checkdmarc.get_mx_hosts`
+       - ``mx`` - See :func:`checkdmarc_signalless.get_mx_hosts`
        - ``spf`` -  A ``valid`` flag, plus the output of
-         :func:`checkdmarc.parse_spf_record` or an ``error``
+         :func:`checkdmarc_signalless.parse_spf_record` or an ``error``
        - ``dmarc`` - A ``valid`` flag, plus the output of
-         :func:`checkdmarc.parse_dmarc_record` or an ``error``
+         :func:`checkdmarc_signalless.parse_dmarc_record` or an ``error``
     """
     domains = sorted(list(set(
         map(lambda d: d.rstrip(".\r\n").strip().lower().split(",")[0],

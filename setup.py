@@ -15,7 +15,7 @@ from setuptools import setup
 from codecs import open
 from os import path
 
-from checkdmarc import __version__
+from checkdmarc_signalless import __version__
 
 desc = "A Python module and command line parser for SPF and DMARC records"
 
@@ -96,6 +96,6 @@ setup(
                       'timeout-decorator>=0.4.1'],
 
     entry_points={
-        'console_scripts': ['checkdmarc=checkdmarc:_main'],
+        'console_scripts': ['checkdmarc_signalless=checkdmarc_signalless:_main'],
     }
 )

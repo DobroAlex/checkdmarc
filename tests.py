@@ -1,6 +1,6 @@
 import unittest
 
-import checkdmarc
+import checkdmarc_signalless
 
 known_good_domains = [
     "fbi.gov",
@@ -13,7 +13,7 @@ class Test(unittest.TestCase):
     def testKnownGood(self):
         """Domains with known good STARTTLS support, SPF and DMARC records"""
 
-        results = checkdmarc.check_domains(known_good_domains)
+        results = checkdmarc_signalless.check_domains(known_good_domains)
         for result in results:
             spf_error = None
             dmarc_error = None
@@ -39,7 +39,7 @@ class Test(unittest.TestCase):
         spf_record = "v=spf1 IP4:147.75.8.208 -ALL"
         domain = "example.no"
 
-        results = checkdmarc.parse_spf_record(spf_record, domain)
+        results = checkdmarc_signalless.parse_spf_record(spf_record, domain)
 
         self.assertEqual(len(results["warnings"]), 0)
 
@@ -48,7 +48,7 @@ class Test(unittest.TestCase):
 
         rec = '"v=spf1 ip4:147.75.8.208 " "include:_spf.salesforce.com -all"'
 
-        parsed_record = checkdmarc.parse_spf_record(rec, "example.com")
+        parsed_record = checkdmarc_signalless.parse_spf_record(rec, "example.com")
 
         self.assertEqual(parsed_record["parsed"]["all"], "fail")
 
@@ -57,12 +57,12 @@ class Test(unittest.TestCase):
         rec = "v=spf1 ip4:213.5.39.110 -all MS=83859DAEBD1978F9A7A67D3"
         domain = "avd.dk"
 
-        parsed_record = checkdmarc.parse_spf_record(rec, domain)
+        parsed_record = checkdmarc_signalless.parse_spf_record(rec, domain)
         self.assertEqual(len(parsed_record["warnings"]), 1)
 
     def testDNSSEC(self):
         """Test known good DNSSEC"""
-        self.assertEqual(checkdmarc.test_dnssec("whalensolutions.com"), True)
+        self.assertEqual(checkdmarc_signalless.test_dnssec("whalensolutions.com"), True)
 
     def testIncludeMissingSPF(self):
         """SPF records that include domains that are missing SPF records
@@ -74,8 +74,8 @@ class Test(unittest.TestCase):
                      'include:mail2.dialogportal.com a:mailrelay.jppol.dk ' \
                      'a:sendmail.jppol.dk ?all"'
         domain = "ekstrabladet.dk"
-        self.assertRaises(checkdmarc.SPFRecordNotFound,
-                          checkdmarc.parse_spf_record, spf_record, domain)
+        self.assertRaises(checkdmarc_signalless.SPFRecordNotFound,
+                          checkdmarc_signalless.parse_spf_record, spf_record, domain)
 
     def testTooManySPFDNSLookups(self):
         """SPF records with > 10 SPF mechanisms that cause DNS lookups raise
@@ -89,8 +89,8 @@ class Test(unittest.TestCase):
                      "include:_spf.google.com " \
                      "~all"
         domain = "example.com"
-        self.assertRaises(checkdmarc.SPFTooManyDNSLookups,
-                          checkdmarc.parse_spf_record, spf_record, domain)
+        self.assertRaises(checkdmarc_signalless.SPFTooManyDNSLookups,
+                          checkdmarc_signalless.parse_spf_record, spf_record, domain)
 
     def testSPFSyntaxErrors(self):
         """SPF record syntax errors raise SPFSyntaxError"""
@@ -98,8 +98,8 @@ class Test(unittest.TestCase):
         spf_record = '"v=spf1 mx a:mail.cohaesio.net ' \
                      'include: trustpilotservice.com ~all"'
         domain = "2021.ai"
-        self.assertRaises(checkdmarc.SPFSyntaxError,
-                          checkdmarc.parse_spf_record, spf_record, domain)
+        self.assertRaises(checkdmarc_signalless.SPFSyntaxError,
+                          checkdmarc_signalless.parse_spf_record, spf_record, domain)
 
     def testSPFInvalidIPv4(self):
         """Invalid ipv4 SPF mechanism values raise SPFSyntaxError"""
@@ -107,37 +107,37 @@ class Test(unittest.TestCase):
                      "+ip4:78.46.224.83 " \
                      "+ip4:relay.mailchannels.net +ip4:138.201.60.20 ~all"
         domain = "surftown.dk"
-        self.assertRaises(checkdmarc.SPFSyntaxError,
-                          checkdmarc.parse_spf_record, spf_record, domain)
+        self.assertRaises(checkdmarc_signalless.SPFSyntaxError,
+                          checkdmarc_signalless.parse_spf_record, spf_record, domain)
 
     def testSPFInvalidIPv4Range(self):
         """Invalid ipv4 SPF mechanism values raise SPFSyntaxError"""
         spf_record = "v=spf1 ip4:78.46.96.236/99 ~all"
         domain = "surftown.dk"
-        self.assertRaises(checkdmarc.SPFSyntaxError,
-                          checkdmarc.parse_spf_record, spf_record, domain)
+        self.assertRaises(checkdmarc_signalless.SPFSyntaxError,
+                          checkdmarc_signalless.parse_spf_record, spf_record, domain)
 
     def testSPFInvalidIPv6(self):
         """Invalid ipv6 SPF mechanism values raise SPFSyntaxError"""
         spf_record = "v=spf1 ip6:1200:0000:AB00:1234:O000:2552:7777:1313 ~all"
         domain = "surftown.dk"
-        self.assertRaises(checkdmarc.SPFSyntaxError,
-                          checkdmarc.parse_spf_record, spf_record, domain)
+        self.assertRaises(checkdmarc_signalless.SPFSyntaxError,
+                          checkdmarc_signalless.parse_spf_record, spf_record, domain)
 
     def testSPFInvalidIPv6Range(self):
         """Invalid ipv6 SPF mechanism values raise SPFSyntaxError"""
         record = "v=spf1 ip6:1200:0000:AB00:1234:0000:2552:7777:1313/130 ~all"
         domain = "surftown.dk"
-        self.assertRaises(checkdmarc.SPFSyntaxError,
-                          checkdmarc.parse_spf_record, record, domain)
+        self.assertRaises(checkdmarc_signalless.SPFSyntaxError,
+                          checkdmarc_signalless.parse_spf_record, record, domain)
 
     def testSPFIncludeLoop(self):
         """SPF record with include loop raises SPFIncludeLoop"""
 
         spf_record = '"v=spf1 include:example.com"'
         domain = "example.com"
-        self.assertRaises(checkdmarc.SPFIncludeLoop,
-                          checkdmarc.parse_spf_record, spf_record, domain)
+        self.assertRaises(checkdmarc_signalless.SPFIncludeLoop,
+                          checkdmarc_signalless.parse_spf_record, spf_record, domain)
 
     def testSPFMissingMXRecord(self):
         """A warning is issued if a SPF record contains a mx mechanism
@@ -145,7 +145,7 @@ class Test(unittest.TestCase):
 
         spf_record = '"v=spf1 mx ~all"'
         domain = "seanthegeek.net"
-        results = checkdmarc.parse_spf_record(spf_record, domain)
+        results = checkdmarc_signalless.parse_spf_record(spf_record, domain)
         self.assertIn("{0} does not have any MX records".format(domain),
                       results["warnings"])
 
@@ -155,7 +155,7 @@ class Test(unittest.TestCase):
 
         spf_record = '"v=spf1 include:_spf.bibsyst.no a mx ~all"'
         domain = "sogne.folkebibl.no"
-        results = checkdmarc.parse_spf_record(spf_record, domain)
+        results = checkdmarc_signalless.parse_spf_record(spf_record, domain)
         self.assertIn("sogne.folkebibl.no does not have any A/AAAA records",
                       results["warnings"])
 
@@ -167,7 +167,7 @@ class Test(unittest.TestCase):
                        "rua=mailto:eits.dmarcrua@energy.gov; " \
                        "ruf=mailto:eits.dmarcruf@energy.gov"
         domain = "energy.gov"
-        results = checkdmarc.parse_dmarc_record(dmarc_record, domain)
+        results = checkdmarc_signalless.parse_dmarc_record(dmarc_record, domain)
         self.assertIn("pct value is less than 100",
                       results["warnings"][0])
 
@@ -177,27 +177,27 @@ class Test(unittest.TestCase):
         dmarc_record = "v=DMARC1; p=none; rua=reports@dmarc.cyber.dhs.gov," \
                        "mailto:dmarcreports@usdoj.gov"
         domain = "dea.gov"
-        self.assertRaises(checkdmarc.InvalidDMARCReportURI,
-                          checkdmarc.parse_dmarc_record, dmarc_record, domain)
+        self.assertRaises(checkdmarc_signalless.InvalidDMARCReportURI,
+                          checkdmarc_signalless.parse_dmarc_record, dmarc_record, domain)
 
         dmarc_record = "v=DMARC1; p=none; rua=__" \
                        "mailto:reports@dmarc.cyber.dhs.gov," \
                        "mailto:dmarcreports@usdoj.gov"
-        self.assertRaises(checkdmarc.InvalidDMARCReportURI,
-                          checkdmarc.parse_dmarc_record, dmarc_record, domain)
+        self.assertRaises(checkdmarc_signalless.InvalidDMARCReportURI,
+                          checkdmarc_signalless.parse_dmarc_record, dmarc_record, domain)
 
     def testUnverifiedDMARCURIDestination(self):
         """Unverified DMARC URI raises UnverifiedDMARCURIDestination"""
         dmarc_record = "v=DMARC1; p=none; rua=mailto:dmarc@example.com"
         domain = "example.net"
-        self.assertRaises(checkdmarc.UnverifiedDMARCURIDestination,
-                          checkdmarc.parse_dmarc_record,
+        self.assertRaises(checkdmarc_signalless.UnverifiedDMARCURIDestination,
+                          checkdmarc_signalless.parse_dmarc_record,
                           dmarc_record,
                           domain)
 
         dmarc_record = "v=DMARC1; p=none; rua=mailto:dmarc@fbi.mil"
-        self.assertRaises(checkdmarc.UnverifiedDMARCURIDestination,
-                          checkdmarc.parse_dmarc_record,
+        self.assertRaises(checkdmarc_signalless.UnverifiedDMARCURIDestination,
+                          checkdmarc_signalless.parse_dmarc_record,
                           dmarc_record,
                           domain)
 
@@ -205,8 +205,8 @@ class Test(unittest.TestCase):
         """An invalid DMARC policy value raises InvalidDMARCTagValue """
         dmarc_record = "v=DMARC1; p=foo; rua=mailto:dmarc@example.com"
         domain = "example.com"
-        self.assertRaises(checkdmarc.InvalidDMARCTagValue,
-                          checkdmarc.parse_dmarc_record,
+        self.assertRaises(checkdmarc_signalless.InvalidDMARCTagValue,
+                          checkdmarc_signalless.parse_dmarc_record,
                           dmarc_record,
                           domain)
 
@@ -217,8 +217,8 @@ class Test(unittest.TestCase):
                        "ruf=mailto:dmarcreports@omb.gov;" \
                        "rua=mailto:dmarcreports@omb.gov"
         domain = "omb.gov"
-        self.assertRaises(checkdmarc.InvalidDMARCTagValue,
-                          checkdmarc.parse_dmarc_record, dmarc_record, domain)
+        self.assertRaises(checkdmarc_signalless.InvalidDMARCTagValue,
+                          checkdmarc_signalless.parse_dmarc_record, dmarc_record, domain)
 
 
 if __name__ == "__main__":

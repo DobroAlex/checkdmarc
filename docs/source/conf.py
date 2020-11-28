@@ -20,7 +20,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../..'))
-from checkdmarc import  __version__
+from checkdmarc_signalless import  __version__
 
 # -- General configuration ------------------------------------------------
 
