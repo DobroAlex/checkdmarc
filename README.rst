@@ -1,7 +1,26 @@
-checkdmarc
-==========
+checkdmarc_signalless
+=====================
 
 |Build Status| |Code Coverage| |PyPI Package|
+
+.. warning::
+    NOTICE:
+    The original work belongs to https://github.com/domainaware/checkdmarc/
+    and was forked by me (DobroAlex@alexkoshernosigov@gmail.com)
+    on the 28th Nov 2020.
+
+    I'm trying to keep this project up to date with the original one.
+
+    The sole purpose of this project is to allow the usage of this package in
+    a multithreaded app. The original project lacks this ability due to the fact
+    it uses timeout_decorator (https://github.com/pnpnpn/timeout-decorator)
+    with signals and signals can not be used in a multithreaded application.
+
+    If you are having issues not related to the timeout please contact
+    the original repo.
+
+
+
 
 A Python module and command line utility for validating SPF and DMARC DNS records
 

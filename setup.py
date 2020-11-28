@@ -26,7 +26,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='checkdmarc',
+    name='checkdmarc_signalless',
 
     # Versions should comply with PEP440.  Fr a discussion on single-sourcing
     # the version across setup.py and the project code, see
@@ -37,11 +37,11 @@ setup(
     long_description=long_description,
 
     # The project's main homepage.
-    url='https://domainaware.github.io/checkdmarc',
+    url='https://github.com/DobroAlex/checkdmarc',
 
     # Author details
-    author='Sean Whalen',
-    author_email='whalenster@gmail.com',
+    author='DobroAlex',
+    author_email='alexkoshernosiegov@gmail.com',
 
     # Choose your license
     license='Apache 2.0',
@@ -84,7 +84,7 @@ setup(
 
     # Alternatively, if you want to distribute just a my_module.py, uncomment
     # this:
-    py_modules=["checkdmarc"],
+    py_modules=["checkdmarc_signalless"],
 
     # List run-time dependencies here.  These will be installed by pip when
     # your project is installed. For an analysis of "install_requires" vs pip's
