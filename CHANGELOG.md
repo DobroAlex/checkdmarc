@@ -1,6 +1,11 @@
 Changelog
 =========
 
+4.3.2.2
+-------
+
+- The version of the "requests" package is now explicitly set to `==2.24.0`
+
 4.3.1
 -----
 

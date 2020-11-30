@@ -21,10 +21,6 @@ desc = "A Python module and command line parser for SPF and DMARC records"
 
 here = path.abspath(path.dirname(__file__))
 
-# Get the long description from the README file
-with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
-    long_description = f.read()
-
 setup(
     name='checkdmarc_signalless',
 
@@ -34,7 +30,7 @@ setup(
     version=__version__,
 
     description=desc,
-    long_description=long_description,
+    long_description=f"See https://github.com/DobroAlex/checkdmarc",
 
     # The project's main homepage.
     url='https://github.com/DobroAlex/checkdmarc',
@@ -92,7 +88,7 @@ setup(
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=['dnspython>=2.0.0', 'expiringdict>=1.1.4',
                       'pyleri>=1.3.2', 'publicsuffix2>=2.20191221',
-                      'requests>=2.25.0',
+                      'requests==2.24.0',
                       'timeout-decorator>=0.4.1'],
 
     entry_points={
