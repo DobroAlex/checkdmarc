@@ -3,38 +3,36 @@
 
 """Validates and parses SPF amd DMARC DNS records"""
 
-import logging
-from collections import OrderedDict
-from re import compile, IGNORECASE
+import atexit
+import ipaddress
 import json
-from csv import DictWriter
-from argparse import ArgumentParser
+import logging
 import os
-from time import sleep
-from datetime import datetime, timedelta
-import socket
-import smtplib
-import tempfile
 import platform
 import shutil
-import atexit
-import requests
-from ssl import SSLError, CertificateError, create_default_context
-
+import smtplib
+import socket
+import tempfile
+from argparse import ArgumentParser
+from collections import OrderedDict
+from csv import DictWriter
+from datetime import datetime, timedelta
 from io import StringIO
-from expiringdict import ExpiringDict
+from re import compile, IGNORECASE
+from ssl import SSLError, CertificateError, create_default_context
+from time import sleep
 
-import publicsuffix2
-import dns.resolver
 import dns.exception
-import timeout_decorator
+import dns.resolver
+import publicsuffix2
+import requests
+from expiringdict import ExpiringDict
 from pyleri import (Grammar,
                     Regex,
                     Sequence,
                     List,
                     Repeat
                     )
-import ipaddress
 
 """Copyright 2019 Sean Whalen
 
@@ -50,7 +48,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License."""
 
-__version__ = "4.3.2.2"
+__version__ = "4.3.2.3"
 
 DMARC_VERSION_REGEX_STRING = r"v=DMARC1;"
 BIMI_VERSION_REGEX_STRING = r"v=BIMI1;"
@@ -1830,9 +1828,6 @@ def get_spf_record(domain, nameservers=None, timeout=2.0):
     return parsed_record
 
 
-@timeout_decorator.timeout(5, timeout_exception=SMTPError,
-                           exception_message="Connection timed out",
-                           use_signals=False)
 def test_tls(hostname, ssl_context=None, cache=None):
     """
     Attempt to connect to a SMTP server port 465 and validate TLS/SSL support
@@ -1946,9 +1941,6 @@ def test_tls(hostname, ssl_context=None, cache=None):
         return tls
 
 
-@timeout_decorator.timeout(5, timeout_exception=SMTPError,
-                           exception_message="Connection timed out",
-                           use_signals=False)
 def test_starttls(hostname, ssl_context=None, cache=None):
     """
     Attempt to connect to a SMTP server and validate STARTTLS support

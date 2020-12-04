@@ -1,6 +1,11 @@
 Changelog
 =========
 
+4.3.2.3
+-------
+
+- Abandoned usage of  the `@timeout` decorator due to the fact it may cause 
+creation of forever pending processes
 4.3.2.2
 -------
 
